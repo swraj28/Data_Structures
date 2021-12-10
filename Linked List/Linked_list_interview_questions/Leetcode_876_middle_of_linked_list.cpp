@@ -34,10 +34,17 @@ public:
 		ListNode* slow = head;
 		ListNode* fast = head;
 
-		while ((fast != NULL) and (fast->next) != NULL) {
+		// For odd length both the while loop will work fine.
+
+		while ((fast != NULL) and (fast->next) != NULL) {  // Detection the second middle node of even length linked list.
 			slow = slow->next;
 			fast = fast->next->next;
 		}
+
+		// while ((fast->next != NULL) and (fast->next->next != NULL)) { // Detection of the first middle of even length of linked list.
+		// 	slow = slow->next;
+		// 	fast = fast->next->next;
+		// }
 
 		return slow;
 	}

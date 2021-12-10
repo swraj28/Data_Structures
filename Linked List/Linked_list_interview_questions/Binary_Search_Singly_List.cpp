@@ -84,7 +84,7 @@ node*midpoint(node*start, node*last) {
 	node*slow = start;
 	node*fast = start;
 
-	while (fast != last and fast->next != last) {
+	while ((fast->next != last) and (fast->next->next != last)) {
 		slow = slow->next;
 		fast = fast->next->next;
 	}

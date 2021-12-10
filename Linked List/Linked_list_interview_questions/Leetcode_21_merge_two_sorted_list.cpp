@@ -25,8 +25,31 @@ struct ListNode {
 class Solution {
 public:
 
-	//Do it inplace.
+	// Recursive:-
+	ListNode* merge(ListNode* a, ListNode* b) {  // Merge two sorted list in recursive way.
 
+		if (a == NULL) {
+			return b;
+		}
+
+		if (b == NULL) {
+			return a;
+		}
+
+		ListNode*c;
+
+		if (a->val <= b->val) {
+			c = a;
+			c->next = merge(a->next, b);
+		} else {
+			c = b;
+			c->next = merge(a, b->next);
+		}
+
+		return c;
+	}
+
+	//Do it inplace. :- (Iterative)
 	ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
 
 		if (l1 == NULL) {

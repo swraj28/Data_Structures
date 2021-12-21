@@ -22,3 +22,27 @@ struct ListNode {
 	ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
+class Solution {
+public:
+	ListNode* deleteDuplicates(ListNode* head) {
+
+		if ((head == nullptr) or (head->next == nullptr)) {
+			return head;
+		}
+
+		ListNode* prev = head;
+		ListNode* curr = head->next;
+
+		while (curr != nullptr) {
+			if ((prev->val) == (curr->val)) {
+				curr = curr->next;
+				prev->next = curr;
+			} else {
+				prev = curr;
+				curr = curr->next;
+			}
+		}
+
+		return head;
+	}
+};

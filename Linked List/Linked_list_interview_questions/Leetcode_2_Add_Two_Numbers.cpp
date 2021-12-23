@@ -112,3 +112,89 @@ public:
 };
 
 // Without Extra Space:-
+
+class Solution {
+public:
+	ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+
+		ListNode* h1 = nullptr;
+		ListNode* p1 = nullptr;
+
+		int carry = 0;
+
+		while (l1 != nullptr and l2 != nullptr) {
+			int sum = (l1->val) + (l2->val) + carry;
+
+			carry = (sum / 10);
+			sum = (sum % 10);
+
+			l1->val = sum;
+
+			if (h1 == nullptr) {
+				h1 = l1;
+				p1 = l1;
+			} else {
+				p1 = l1;
+			}
+
+			l1 = l1->next;
+			l2 = l2->next;
+		}
+
+		while (l1 != nullptr) {
+			int sum = (l1->val) + carry;
+
+			carry = (sum / 10);
+
+			sum = (sum % 10);
+
+			l1->val = sum;
+
+			if (h1 == nullptr) {
+				h1 = l1;
+				p1 = l1;
+			} else {
+				p1 = l1;
+			}
+
+			l1 = l1->next;
+		}
+
+		while (l2 != nullptr) {
+			int sum = (l2->val) + carry;
+
+			carry = (sum / 10);
+			sum = (sum % 10);
+
+			l2->val = sum;
+
+			if (h1 == nullptr) {
+				h1 = l2;
+				p1 = h1;
+			} else {
+				p1->next = l2;
+				p1 = p1->next;
+			}
+
+			l2 = l2->next;
+		}
+
+		while (carry > 0) {
+
+			int x = carry % 10;
+			carry /= 10;
+
+			ListNode * n = new ListNode(x);
+
+			if (h1 == nullptr) {
+				h1 = n;
+				p1 = n;
+			} else {
+				p1->next = n;
+				p1 = p1->next;
+			}
+		}
+
+		return h1;
+	}
+};

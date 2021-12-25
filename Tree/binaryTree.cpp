@@ -360,8 +360,10 @@ void in_order_itr(node*root) {
 		curr = curr->right;
 	}
 }
+
 void inOrder_morris_traversal(node*root) {//t.c-o(nodes) and s.c-o(1)
 	if (root == NULL)return;
+
 	node*curr = root;
 
 	while (curr != NULL) {

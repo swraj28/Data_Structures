@@ -24,31 +24,12 @@ struct ListNode {
 
 class Solution {
 public:
-	ListNode* swapNodes(ListNode* head, int k) {
+	Solution(ListNode* head) {
 
-		if (head->next == nullptr) {
-			return head;
-		}
+	}
 
-		ListNode* slow = head, *fast = head;
-		k -= 1;
+	int getRandom() {
 
-		while (k > 0) {
-			fast = fast->next;
-			k -= 1;
-		}
-
-		ListNode* kthnode_beginning = fast;
-
-		while (fast->next) {
-			slow = slow->next;
-			fast = fast->next;
-		}
-
-		ListNode* kthnode_end = slow;
-
-		swap(kthnode_beginning->val, kthnode_end->val);
-
-		return head;
 	}
 };
+

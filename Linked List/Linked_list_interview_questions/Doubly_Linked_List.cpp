@@ -37,16 +37,18 @@ public : class Node {
 
 	// Exceptions========================================
 
-private: bool ListIsEmptyException() {
-		if (this->size == 0) {
-			cout << "ListIsEmpty: ";
+private: bool indexIsInvalidException(int index, int leftRange, int rightRange) {
+		if (index < leftRange || index > rightRange) {
+			cout << ("IndexIsInValid: ");
 			return true;
 		}
 		return false;
 	}
-private: bool indexIsInvalidException(int index, int leftrange, int rightrange) {
-		if (index < leftrange || index > rightrange ) {
-			cout << "IndexIsInValid: ";
+
+
+private: bool ListIsEmptyException() {
+		if (this->size == 0) {
+			cout << "ListIsEmpty: ";
 			return true;
 		}
 		return false;
@@ -55,47 +57,17 @@ private: bool indexIsInvalidException(int index, int leftrange, int rightrange) 
 	// BasicFunctions======================================
 
 public: int Size() {
-
+		// write your code here
 		return size;
 	}
 
 public: bool isEmpty() {
+		// write your code here
 
-		return size == 0;
-	}
-	// getFunctions======================================
-public: int getFirst() {
-		if (ListIsEmptyException()) {
-			return -1;
-		}
-		return head->data;
+		return this->size == 0;
 
 	}
 
-public: int getLast() {
-
-		if (ListIsEmptyException()) {
-			return -1;
-		}
-		return tail->data;
-	}
-
-public : Node* getNodeAt(int index) {
-		Node *curr = this->head;
-		while (index-- > 0) {
-			curr = curr->next;
-		}
-		return curr;
-
-	}
-public : int getAt(int index) {
-		if (ListIsEmptyException())return -1;
-		else if (indexIsInvalidException(index, 0, this->size - 1)) {
-			return -1;
-		}
-		Node *node = getNodeAt(index);
-		return node->data;
-	}
 	// AddFunctions======================================
 
 public: void addFirstNode(Node* node) {
@@ -130,32 +102,6 @@ public: void addLast(int val) {
 		addLastNode(node);
 	}
 
-public: void addNodeAt(int index, Node *node) {
-		if (index == 0)addFirstNode(node);
-		else if (index == this->size)addLastNode(node);
-		else {
-			Node *frwrd = getNodeAt(index);
-			Node *prev = frwrd->prev;
-
-			prev->next = node;
-			node->prev = prev;
-
-
-			node->next = frwrd;
-			frwrd->prev = node;
-
-			this->size++;
-		}
-	}
-public: void addAt(int index, int data) {
-		if (indexIsInvalidException(index, 0, this->size)) {
-			cout << -1 << endl;
-		} else {
-			Node *node = new Node(data);
-			addNodeAt(index, node);
-		}
-
-	}
 	// RemoveFunctions======================================
 
 public: Node *removeFirstNode() {
@@ -204,40 +150,267 @@ public: int removeLast() {
 		return node->data;
 	}
 
-public: int removeNodeAt(int index) {
-		if (index == 0) {
-			return removeFirst();
-		} else if (index == (this->size - 1)) {
-			return removeLast();
-		} else {
-			Node *frwrd = getNodeAt(index);
-			Node *prev = frwrd->prev;
+	// getFunctions======================================
 
-			prev->next = prev->next->next;
+public: int getFirst() {
+		if (ListIsEmptyException()) {
+			return -1;
+		}
+		return head->data;
 
-			if (frwrd->next) {
-				frwrd->next->prev = prev;
-			}
+	}
+private: Node* getNodeAt(int index) {
+		Node*curr = this->head;
+		while (curr != nullptr && index-- > 0)
+			curr = curr->next;
 
-			frwrd->next = nullptr;
-			frwrd->prev = nullptr;
+		return curr;
+	}
+
+public: int getLast() {
+
+		if (ListIsEmptyException()) {
+			return -1;
+		}
+		return tail->data;
+	}
+
+private: void addNodeAt(int index, Node* node) {
+		if (index == 0)
+			addFirstNode(node);
+		else if (index == this->size)
+			addLastNode(node);
+		else {
+			Node* forw = getNodeAt(index);
+			Node* prev = forw->prev;
+
+			prev->next = node;
+			node->prev = prev;
+
+			node->next = forw;
+			forw->prev = node;
+
+			this->size++;
+		}
+	}
+public : int getAt(int index) {
+		if (ListIsEmptyException()) {
+			return -1;
+		} else if (indexIsInvalidException(index , 0, this->size - 1)) {
+			return -1;
+		}
+
+		Node* curr = head;
+		for (int i = 1 ; i <= index ; i++) {
+			curr = curr->next;
+		}
+
+		return curr->data;
+
+	}
+public: void addAt(int index, int data) {
+		if (indexIsInvalidException(index, 0, this->size))
+			cout << -1 << endl;
+		else {
+			Node* node = new Node(data);
+			addNodeAt(index, node);
+		}
+	}
+private: Node* removeAtNode(int index) {
+		if (index == 0)
+			return removeFirstNode();
+		else if (index == this->size - 1)
+			return removeLastNode();
+		else {
+			Node* node = getNodeAt(index);
+			Node* prev = node->prev;
+			Node* forw = node->next;
+
+			prev->next = forw;
+			forw->prev = prev;
+
+			node->next = nullptr;
+			node->prev = nullptr;
 
 			this->size--;
-
-			return frwrd->data;
+			return node;
 		}
 	}
 
 public: int removeAt(int index) {
+		if (ListIsEmptyException() )
+			return -1;
 
-		//write your code here
-		if (ListIsEmptyException()) {
+		if (indexIsInvalidException(index, 0, this->size - 1)) {
 			return -1;
-		} else if (indexIsInvalidException(index, 0, this->size - 1)) {
-			return -1;
-		} else {
-			return removeNodeAt(index);
 		}
+
+		Node* node = removeAtNode(index);
+		return node->data;
+	}
+public : void addBefore(Node* refNode, int data) {
+		Node* node = new Node(data);
+		Node* prev = refNode->prev;
+
+		if (prev == nullptr) {
+			node->next = refNode;
+			refNode->prev = node;
+			this->head = node;
+		} else {
+			prev->next = node;
+			node->prev = prev;
+
+			node->next = refNode;
+			refNode->prev = node;
+		}
+
+		this->size++;
+	}
+
+public: void addBefore(int idx, int data) {
+		Node* node = getNodeAt(idx);
+		addBefore(node, data);
+	}
+
+public : void addAfter(Node* refNode, int data) {
+		Node* node = new Node(data);
+		Node* forw = refNode->next;
+
+		if (forw == nullptr) {
+			refNode->next = node;
+			node->prev = refNode;
+			this->tail = node;
+		} else {
+			forw->prev = node;
+			node->next = forw;
+
+			node->prev = refNode;
+			refNode->next = node;
+		}
+
+		this->size++;
+	}
+
+public: void addAfter(int idx, int data) {
+		Node* node = getNodeAt(idx);
+		addAfter(node, data);
+	}
+
+private: Node *removeAfterNode(Node* refNode) {
+		Node* forw = refNode->next;
+		if (forw->next == nullptr) {
+			refNode->next = nullptr;
+			forw->prev = nullptr;
+			this->tail = refNode;
+		} else {
+			refNode->next = forw->next;
+			forw->next->prev = refNode;
+
+			forw->next = nullptr;
+			forw->prev = nullptr;
+		}
+		this->size--;
+		return forw;
+	}
+
+public: int removeAfter(Node* refNode) {
+		if (refNode == nullptr || refNode->next == nullptr) {
+			cout << ("LocationIsInvalid: ") << endl;
+			return -1;
+		}
+		return removeAfterNode(refNode)->data;
+	}
+
+public : int removeAfter(int idx) {
+		if (idx < 0 || idx >= this->size) {
+			cout << "LocationIsInvalid: " << endl;
+			return -1;
+		}
+		Node* node = getNodeAt(idx);
+		return removeAfter(node);
+	}
+
+private: Node* removeBeforeNode(Node* refNode) {
+		Node* prevNode = refNode->prev;
+		if (prevNode->prev == nullptr) {
+			refNode->prev = nullptr;
+			prevNode->next = nullptr;
+			this->head = refNode;
+		} else {
+			refNode->prev = prevNode->prev;
+			prevNode->prev->next = refNode;
+
+			prevNode->next = nullptr;
+			prevNode->prev = nullptr;
+		}
+		this->size--;
+		return prevNode;
+	}
+
+public : int removeBefore(Node* refNode) {
+		if (refNode == nullptr || refNode->prev == nullptr) {
+			cout << "LocationIsInvalid: " << endl;
+			return -1;
+		}
+		return removeBeforeNode(refNode)->data;
+	}
+
+public: int removeBefore(int idx) {
+		if (idx < 0 || idx >= this->size) {
+			cout << "LocationIsInvalid: " << endl;
+			return -1;
+		}
+		Node* node = getNodeAt(idx);
+		return removeBefore(node);
+	}
+
+public: int removeNode(Node* refNode) {
+		if (refNode == nullptr) {
+			cout << "LocationIsInvalid: ";
+			return -1;
+		}
+
+		if (refNode == this->head) {
+			return removeBefore(this->head->next);
+		}
+
+		if (refNode == this->tail) {
+			return removeAfter(refNode->prev);
+		}
+
+		return removeAfter(refNode->prev);
+	}
+
+public: int removeNode(int idx) {
+
+		Node* node = getNodeAt(idx);
+		return removeBefore(node);
+
+	}
+
+public : void displayForw() {
+		cout << "[";
+		Node* curr = head;
+		while (curr != nullptr) {
+			cout << curr->data;
+			if (curr->next != nullptr) {
+				cout << ", ";
+			}
+			curr = curr->next;
+		}
+		cout << "]" << endl;
+	}
+public : void displayBack() {
+		cout << "[";
+		Node* curr = tail;
+		while (curr != nullptr) {
+			cout << curr->data;
+			if (curr->prev != nullptr) {
+				cout << ", ";
+			}
+			curr = curr->prev;
+		}
+		cout << "]" << endl;
 	}
 };
 
@@ -249,7 +422,7 @@ int main() {
 	cin >> str;
 
 	while (str != "stop") {
-		int data, index;
+		int data;
 		if (str == ("addFirst")) {
 			cin >> data;
 			dll->addFirst(data);
@@ -268,28 +441,56 @@ int main() {
 			cout << (dll->getLast()) << endl;
 		else if (str == ("size"))
 			cout << (dll->Size()) << endl;
-		else if (str == ("isEmpty")) {
-			if ((dll->isEmpty())) {
-				cout << "true" << "\n";
-			} else cout << "false" << endl;
-		}
-
+		else if (str == ("isEmpty"))
+			cout << (dll->isEmpty() == 0 ? "false" : "true") << endl;
 		else if (str == ("getAt")) {
 			cin >> data;
 			cout << dll->getAt(data) << endl ;
 		}
 		else if (str == ("addAt")) {
-			cin >> index; cin >> data;
-			dll->addAt(index, data);
+			cin >> data;
+			int val;
+			cin >> val;
+			dll->addAt(data , val);
 		}
 		else if (str == ("removeAt")) {
 			cin >> data;
 			dll->removeAt(data);
 		}
+		else if (str == ("addBefore")) {
+			cin >> data;
+			int val;
+			cin >> val;
+			dll->addBefore(data , val);
+		}
+		else if (str == ("addAfter")) {
+			cin >> data;
+			int val;
+			cin >> val;
+			dll->addAfter(data, val);
+		}
+		else if (str == ("removeAfter")) {
+			cin >> data;
+			cout << (dll->removeAfter(data)) << endl;
+		}
+		else if (str == ("removeBefore")) {
+			cin >> data;
+			cout << (dll->removeBefore(data)) << endl;
+		}
+		else if (str == ("removeNode")) {
+			cin >> data;
+			cout << (dll->removeNode(data)) << endl;
+		}
+		else if (str == ("displayForw")) {
+			dll->displayForw();
+		}
+		else if (str == ("displayBack")) {
+			dll->displayBack();
+		}
+
 
 		cin >> str;
 	}
-
 	cout << dll->toString();
 
 	return 0;

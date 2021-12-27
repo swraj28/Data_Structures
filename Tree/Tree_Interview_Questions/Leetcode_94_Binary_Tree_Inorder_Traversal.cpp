@@ -27,66 +27,31 @@ struct TreeNode {
 class Solution {
 public:
 
-	void inOrder(TreeNode*root) {
-		if (root == NULL) {
-			return;
-		}
-
-		inOrder(root->left);
-		cout << root->val << " ";
-		inOrder(root->right);
-	}
+	vector<int> res;
 
 	void in_order_itr(TreeNode*root) {
 
 		stack<TreeNode*>s;
 		TreeNode*curr = root;
 
-		while (!s.empty() or curr != NULL) {
+		while (!s.empty() or curr != nullptr) {
 
 			while (curr != NULL) {
 				s.push(curr);
 				curr = curr->left;
 			}
 			curr = s.top();
-			cout << curr->val << " ";
+			res.pb(curr->val);
 			s.pop();
 
 			curr = curr->right;
 		}
 	}
 
-	void inOrder_morris_traversal(TreeNode*root) {//t.c-o(nodes) and s.c-o(1)
-		if (root == NULL)return;
-
-		TreeNode*curr = root;
-
-		while (curr != NULL) {
-
-			if (curr->left == NULL) {
-				cout << curr->val << " ";
-				curr = curr->right;
-			} else {
-				//find the inorder predecessor of curr
-				TreeNode*pred = curr->left;
-				//To find predecessor keep going right till right TreeNode is not null or right TreeNode is not current.
-				while (pred->right != NULL and pred->right != curr) {
-					pred = pred->right;
-				}
-				//if right TreeNode is null then go left after establishing link from predecessor to current.
-				if (pred->right == NULL) {
-					pred->right = curr;
-					curr = curr->left;
-				} else { //left is already visit. Go right after visiting current.
-					pred->right == NULL;
-					cout << curr->val << " ";
-					curr = curr->right;
-				}
-			}
-		}
-	}
-
 	vector<int> inorderTraversal(TreeNode* root) {
 
+		in_order_itr(root);
+
+		return res;
 	}
 };

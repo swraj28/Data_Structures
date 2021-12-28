@@ -14,6 +14,7 @@ using namespace std;
 
 
 //Definition for a binary tree Node.
+
 struct TreeNode {
 	int val;
 	TreeNode *left;
@@ -23,23 +24,22 @@ struct TreeNode {
 	TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
-
 class Solution {
 public:
 
-	vector<int> res;
+	vector<int>res;
 
 	// 1. Recursion:-
 
 	// T.c:- O(nodes) and S.c:- Space Occupied while building recursion Stack--> In worst case O(node)--> skew Tree(Left Skew)
-	void inOrder_rec(TreeNode*root) {
-		if (root == NULL) {
+	void preOrder_rec(TreeNode* root) {
+		if (root == nullptr) {
 			return;
 		}
 
-		inOrder_rec(root->left);
 		res.pb(root->val);
-		inOrder_rec(root->right);
+		preOrder_rec(root->left);
+		preOrder_rec(root->right);
 	}
 
 	// 2. Iterative Using an Explicit Stack:-
@@ -49,28 +49,33 @@ public:
 	   S.c:- O(nodes)--> If we consider a left skew tree
 	*/
 
-	void in_order_itr(TreeNode*root) {
+	void preOrder_itr(TreeNode* root) {
+		if (root == nullptr) {
+			return;
+		}
 
-		stack<TreeNode*>s;
-		TreeNode*curr = root;
+		stack<TreeNode*> s;
+		s.push(root);
 
-		while ((!s.empty()) or (curr != nullptr)) { // why have we used current in while loop? (Make a dry run of right skew tree and it will be clear)
-
-			while (curr != NULL) {
-				s.push(curr);
-				curr = curr->left;
-			}
-
-			curr = s.top();
-			res.pb(curr->val);
-
+		while (!s.empty()) {
+			TreeNode* curr = s.top();
 			s.pop();
 
-			curr = curr->right;
+			res.pb(curr->val);
+
+			// First Put the right child in the stack then push the left child in the stack.
+
+			if (curr->right) {
+				s.push(curr->right);
+			}
+
+			if (curr->left) {
+				s.push(curr->left);
+			}
 		}
 	}
 
-	// 3. Morris Traversal For Inorder Traversal:-
+	// 3. Morris Traversal For Preorder Traversal:-
 
 	/*
 	    T.c:- O(nodes)
@@ -78,7 +83,7 @@ public:
 
 	*/
 
-	void inOrder_morris(TreeNode* root) {
+	void preOrder_morris(TreeNode* root) {
 		if (root == nullptr) {
 			return;
 		}
@@ -92,31 +97,27 @@ public:
 				curr = curr->right;
 			} else {
 
-				// Find the inorder successor of current.
-				TreeNode* succ = curr->left;
-				//To find the inorder successor keep going right till right node is not null or right node is not current.
-				while ((succ->right != nullptr) and (succ->right != curr)) {
-					succ = succ->right;
+				TreeNode* pred = curr->left;
+
+				while ((pred->right != nullptr) and (pred->right != curr)) {
+					pred = pred->right;
 				}
 
-				//if right node is null then go left after establishing link from predecessor to current.
-				if (succ->right == nullptr) {
-					succ->right = curr;
-					curr = curr->left;
-				} else { //This condition arises when the left subtree is entirely processed. (Remove the connection otherwise infinite loop will occur)
-					succ->right = nullptr;
+				if (pred->right == nullptr) {
+					pred->right = curr;
 					res.pb(curr->val);
+					curr = curr->left;
+				} else {
+					pred->right = nullptr;
 					curr = curr->right;
 				}
 			}
 		}
 	}
 
-	vector<int> inorderTraversal(TreeNode* root) {
+	vector<int> preorderTraversal(TreeNode* root) {
 
-		// in_order_itr(root);
-
-		inOrder_morris(root);
+		preOrder_morris(root);
 
 		return res;
 	}

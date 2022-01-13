@@ -28,7 +28,7 @@ struct TreeNode {
 	 Expected Auxiliary Space: O(Height of the Tree).
 */
 
-// 1. Using Extra Space:- (Brute Force)
+// 1. Using Extra Space:- (Brute Force)--> Using Level Order Traversal:-
 
 class Solution {
 public:
@@ -79,5 +79,37 @@ public:
 	vector<int> rightSideView(TreeNode* root) {
 
 		return View(root);
+	}
+};
+
+// Optimized :- Using DFS:- (Auxiliary Space--> Stack Frame Created Equals to the Height Of the Tree).
+
+class Solution {
+public:
+
+	vector<int> v;
+
+	int first_view = 1;
+
+	void dfs(TreeNode *root, int curr_level) {
+		if (root == NULL)return;
+
+		if (first_view == curr_level) {
+			v.push_back(root->val);
+			first_view++;
+		}
+
+		dfs(root->right, curr_level + 1);
+		dfs(root->left, curr_level + 1);
+	}
+
+	vector<int> rightSideView(TreeNode* root) {
+		if (root == NULL)return v;
+
+		int curr_level = 1;
+		dfs(root, curr_level);
+
+		return v;
+
 	}
 };

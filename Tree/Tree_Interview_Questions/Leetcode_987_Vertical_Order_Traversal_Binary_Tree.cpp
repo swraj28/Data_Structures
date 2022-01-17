@@ -23,20 +23,15 @@ struct TreeNode {
 	TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
+/*
+
+       The Key Idea is that either use DFS or BFS but we need to maintain the level. Earlier level nodes should not be processed after
+       the levels below the given level.
+
+*/
+
 class Solution {
 public:
-
-	map<int, multiset<int>> m;
-
-	void dfs(TreeNode* root, int angle) {
-		if (root == nullptr) {
-			return;
-		}
-
-		m[angle].insert(root->val);
-		dfs(root -> left, (angle - 1));
-		dfs(root->right, (angle + 1));
-	}
 
 	vector<vector<int>> verticalTraversal(TreeNode* root) {
 
@@ -45,17 +40,51 @@ public:
 			return ans;
 		}
 
-		dfs(root, 0);
+		queue<pair<TreeNode*, int>> q;
+		q.push({root, 0});
 
-		vector<int> x;
+		multiset<pair<int, int>> s;
 
-		for (auto v : m) {
-			x.clear();
-			for (auto ele : v.ss) {
-				x.pb(ele);
+		map<int, vector<int>> m;
+
+		while (true) {
+
+			int sze = q.size();
+			if (sze == 0) {
+				break;
 			}
 
-			ans.pb(x);
+			s.clear();
+
+			while (sze--) {
+
+				auto p = q.front();
+				q.pop();
+
+				int val = p.ff->val;
+				int angle = p.ss;
+
+				s.insert({angle, val});
+
+				if (p.ff->left) {
+					q.push({p.ff->left, (angle - 1)});
+				}
+
+				if (p.ff->right) {
+					q.push({p.ff->right, (angle + 1)});
+				}
+			}
+
+			for (auto p : s) {
+				int val = p.ss;
+				int angle = p.ff;
+
+				m[angle].pb(val);
+			}
+		}
+
+		for (auto i : m) {
+			ans.pb(i.ss);
 		}
 
 		return ans;

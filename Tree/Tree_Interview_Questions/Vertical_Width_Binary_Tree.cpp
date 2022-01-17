@@ -27,6 +27,49 @@ struct Node {
 };
 
 
+int verticalTraversal(Node* root) {
+
+	if (root == nullptr) {
+		return 0;
+	}
+
+	queue<pair<Node*, int>> q;
+	q.push({root, 0});
+
+	map<int, vector<int>> m;
+
+	while (true) {
+
+		int sze = q.size();
+		if (sze == 0) {
+			break;
+		}
+
+		while (sze--) {
+
+			auto p = q.front();
+			q.pop();
+
+			int val = p.first->data;
+			int angle = p.second;
+
+			m[angle].push_back(val);
+
+			if (p.first->left) {
+				q.push({p.first->left, (angle - 1)});
+			}
+
+			if (p.first->right) {
+				q.push({p.first->right, (angle + 1)});
+			}
+		}
+	}
+
+	return m.size();
+}
+
+
 int verticalWidth(Node* root) {
-	// Code here
+
+	return verticalTraversal(root);
 }

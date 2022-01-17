@@ -21,8 +21,71 @@ struct Node {
 
 class Solution {
 public:
+
+	vector<int> v;
+
+	void dfs(Node* root) {
+		if (root == nullptr) {
+			return;
+		}
+
+		if (root->left == nullptr and root->right == nullptr) {
+			v.push_back(root->data);
+		}
+
+		dfs(root->left);
+		dfs(root->right);
+	}
+
 	vector <int> boundary(Node *root) {
 
+		if (root == nullptr) {
+			return v;
+		}
 
+		if (root->left == nullptr and root->right == nullptr) {
+			v.push_back(root->data);
+			return v;
+		}
+
+		Node* temp = root->left;
+
+		v.push_back(root->data);
+
+		while (temp != nullptr) {
+			if (temp->left != nullptr or temp->right != nullptr) {
+				v.push_back(temp->data);
+			}
+			if (temp->left) {
+				temp = temp->left;
+			} else {
+				temp = temp->right;
+			}
+		}
+
+		dfs(root);
+
+		vector<int> v1;
+
+		temp = (root->right);
+
+		while (temp != nullptr) {
+			if (temp->left != nullptr or temp->right != nullptr) {
+				v1.push_back(temp->data);
+			}
+			if (temp->right) {
+				temp = temp->right;
+			} else {
+				temp = temp->left;
+			}
+		}
+
+		reverse(v1.begin(), v1.end());
+
+		for (auto node : v1) {
+			v.push_back(node);
+		}
+
+		return v;
 	}
 };

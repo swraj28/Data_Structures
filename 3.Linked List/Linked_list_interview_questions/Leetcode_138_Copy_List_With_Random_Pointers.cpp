@@ -58,6 +58,14 @@ public:
 
 // 2. Without using extra space.
 
+/*
+     The Key Idea here is to create the copy of every node in between two nodes.
+
+     1--->(copy of 1)--->2--->(copy of 2)--->3---->(copy of 3)--->4-->(copy of 4)--->NULL
+
+     From here we can say one thing that random of (copy of 1) will be next to the random of original copy of 1. (similar is the case with other nodes).
+*/
+
 class Solution {
 public:
     Node* copyRandomList(Node* head) {

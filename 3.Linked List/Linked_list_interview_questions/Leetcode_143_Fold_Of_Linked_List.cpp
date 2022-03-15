@@ -22,6 +22,16 @@ struct ListNode {
 	ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
+/*
+       The Key Idea here is to reverse the list from mid to end and start connecting.
+
+       1->2->3->4->5->6->7->nullptr
+
+       a.)1->2->3->4->null   5->6->7->null
+
+       b.)1->5->2->6->3->7->4->null.
+*/
+
 class Solution {
 public:
 	void fold(ListNode *head) {

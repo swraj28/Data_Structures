@@ -72,7 +72,7 @@ void insertAtTail(node* &head, int data) { //it is similar to the push_back() fu
 //At every time we are decreasing our serch space by half but the midpoint function iterates over all the
 //nodes in the range
 
-//t.c=1+2+4+.....+n/4+n/2+n (Gp haing no of terms log(n))
+//t.c=1+2+4+.....+n/4+n/2+n (Gp haing no of terms log2(n))+1.  ----> After solving the G.P, T.c:- O(n)
 
 // A Better appraoch also exist by using skip list  (A Linked List with self Balancing BST Like Prop) in O(root(n))
 

@@ -22,6 +22,10 @@ struct ListNode {
 	ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
+/*
+    Pretty Similar to the merge sort we perform on the array .
+*/
+
 class Solution {
 public:
 

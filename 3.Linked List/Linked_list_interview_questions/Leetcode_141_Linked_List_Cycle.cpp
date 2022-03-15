@@ -22,6 +22,8 @@ struct ListNode {
 	ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
+// See the notes for the proof of Floyd Cycle Detection Algorithm
+
 class Solution {
 public:
 	bool hasCycle(ListNode *head) {

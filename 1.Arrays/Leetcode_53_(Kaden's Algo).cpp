@@ -171,4 +171,39 @@ public:
 	}
 };
 
+// Printing The Maximum Subarray Sum:-
+
+void print_max_sum_subarray(vector<int> &nums) {
+
+	int cur_max = nums[0], global_max = nums[0], end_idx = 0, start_idx = 0, global_max_st_idx = 0;
+
+	for (int i = 1; i < nums.size(); i++) {
+
+		if (nums[i] > (cur_max + nums[i])) {
+			cur_max = nums[i];
+			start_idx = i;
+		} else if (nums[i] < (cur_max + nums[i])) {
+			cur_max = (cur_max + nums[i]);
+		}
+
+		if (cur_max > global_max) {
+			global_max = cur_max;
+			global_max_st_idx = start_idx;
+			end_idx = i;
+		}
+	}
+
+	// if (global_max <0)--> All The Elements are negative, then taking an empty subarry makes sense
+
+	if (global_max < 0) {
+		cout << "No Such Array Is Possible: Empty Array Exist {}";
+	} else {
+		cout << global_max << endl;
+		for (int i = global_max_st_idx; i <= end_idx; i++) {
+			cout << nums[i] << " ";
+		}
+		cout << endl;
+	}
+}
+
 // Divide and Conqure Techniques to solve the maximum subarray sum:-

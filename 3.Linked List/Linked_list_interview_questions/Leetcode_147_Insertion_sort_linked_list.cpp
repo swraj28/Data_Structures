@@ -22,9 +22,28 @@ struct ListNode {
 	ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
+/*
+       The Key Idea of insertion sort is that the left part of the array or the linked list is maintained sorted while an element from the
+       right part of the linked list is picked and placed at its correct position in the left part
+
+       e.g:-
+       		4->3->2->1->5->null
+
+       	Step 1:-	4->null  3->2->1->5->null
+
+       	Step 2:-	3->4->null  2->1->5->null
+
+       	Step 3:-	2->3->4->null  1->5->null
+
+       	Step 4:-	1->2->3->4->null   5->null
+
+       	Step 5:-	1->2->3->4->5->null  {}
+*/
+
 class Solution {
 public:
 	ListNode* insertionSortList(ListNode* head) {
+
 		if (head == nullptr or head->next == nullptr) {
 			return head;
 		}

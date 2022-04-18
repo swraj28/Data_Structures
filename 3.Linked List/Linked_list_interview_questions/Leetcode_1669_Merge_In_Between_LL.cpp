@@ -26,5 +26,38 @@ class Solution {
 public:
 	ListNode* mergeInBetween(ListNode* list1, int a, int b, ListNode* list2) {
 
+		ListNode* p = nullptr, *c = list1;
+
+		int x = 0;
+
+		ListNode* p_a = nullptr, *c_a = nullptr;
+
+		while (x <= b) {
+			if (x == a) {
+				p_a = p;
+				c_a = c;
+			}
+
+			x++;
+			p = c;
+			c = c->next;
+		}
+
+		ListNode* temp = list2;
+		while (temp->next) {
+			temp = temp->next;
+		}
+
+		p->next = nullptr;
+
+		if (a == 0) {
+			temp->next = c;
+			return list2;
+		}
+
+		p_a->next = list2;
+		temp->next = c;
+
+		return list1;
 	}
 };
